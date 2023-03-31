@@ -1,0 +1,110 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+:root {
+  --light: #fff;
+  --light-primary: #eee;
+  --light-secondary: #ccc;
+  --dark: #3d3d3d;
+  --black: #000;
+  --rgba: rgba(0, 0, 0, 0.5);
+  --offwhite: #bbb;
+  --blue: #3ea6ff;
+  --blue-secondary: #065fd4;
+  --color-invalid: #f00;
+  --red: #f00;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  padding: 0;
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+input {
+  border: 0;
+  outline: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+textarea {
+  resize: none;
+  border: 0;
+  outline: 0;
+  font-family: "Roboto", sans-serif;
+}
+
+button {
+  border: 0;
+  outline: 0;
+}
+
+.layout {
+  position: relative;
+  display: flex;
+  background-color: var(--light);
+  color: var(--dark);
+}
+
+.layout[data-theme="dark"] {
+  color: var(--light);
+  background-color: var(--dark);
+}
+
+.skeleton {
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(200, 20%, 75%);
+  }
+
+  100% {
+    background-color: hsl(200, 20%, 90%);
+  }
+}
+
+@media screen and (max-width:1035px) {
+  .layout {
+    position: relative;
+    /* relative to the sidebar */
+  }
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #eee;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 2px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

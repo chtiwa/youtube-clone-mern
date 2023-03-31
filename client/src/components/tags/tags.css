@@ -1,0 +1,92 @@
+.tags {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 100%;
+  overflow-x: hidden;
+  padding: 0;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+  gap: 0.5rem;
+  position: relative;
+}
+
+.tags[data-theme="dark"] {
+  background-color: var(--dark);
+  color: var(--light);
+  box-shadow: 0 1px 0 var(--light);
+}
+
+.tags[data-theme="dark"] button,
+.tags[data-theme="dark"] ul li {
+  background-color: var(--dark);
+  color: var(--light);
+}
+
+.tags[data-theme="dark"] ul li {
+  box-shadow: 0 0 0 1px var(--light);
+}
+
+.tags button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--light);
+  padding: 0.5rem;
+}
+
+.next-btn {
+  position: absolute;
+  right: 0;
+  z-index: 2;
+}
+
+.prev-btn {
+  position: absolute;
+  left: 0;
+  z-index: 2;
+}
+
+.tags-icon {
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+.tags-list {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  /* overflow-x: hidden; */
+  margin: 0;
+  padding: 0.5rem;
+  gap: 0.8rem;
+  transition: transform 300ms ease-in;
+}
+
+.tags-item {
+  padding: 0.45rem 0.6rem;
+  background-color: var(--light-primary);
+  color: var(--dark);
+  border-radius: 1rem;
+  box-shadow: 0 0 2px var(--rgba);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color .3s ease-in;
+  width: max-content;
+}
+
+.tags-item:hover {
+  background-color: var(--light-secondary);
+}
+
+.tags-item-active,
+.tags-item-active:hover {
+  background-color: var(--dark);
+  color: var(--light-primary);
+}
+
+.tags[data-theme="dark"] ul li.tags-item-active,
+.tags[data-theme="dark"] ul li.tags-item-active:hover {
+  color: var(--dark);
+  background-color: var(--light-primary);
+}

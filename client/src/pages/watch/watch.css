@@ -1,0 +1,358 @@
+.watch {
+  max-width: 100vw;
+  height: max-content;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.watch[data-theme="dark"] {
+  background-color: var(--dark);
+  color: var(--light);
+}
+
+.watch-video {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+}
+
+.watch-fullscreen {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+}
+
+.watch-video-fullscreen {
+  width: 100%;
+}
+
+.watch-videos {
+  width: 25%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* max-height: 100vh; */
+  /* overflow-y: auto; */
+}
+
+.watch-videos-fullscreen {
+  display: none;
+}
+
+
+.watch-video-wrapper {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  flex-direction: column;
+  width: 100%;
+  padding: 0.3rem 0.4rem;
+  margin-bottom: 0.7rem;
+  gap: 0.5rem;
+}
+
+.watch-video-title {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 0.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.watch-video-description-show {
+  font-size: 15px;
+  padding: 0.3rem;
+  /* opacity: 1; */
+  display: flex;
+  flex-direction: column;
+  height: max-content;
+  margin: 0 5rem;
+  /* transition: height 300ms ease-in-out, opacity 300ms ease-in-out; */
+}
+
+
+.watch-video-description-show p {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+/* .watch-video-description-hide {
+  opacity: 0;
+  height: 0;
+} */
+
+.watch-video-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 14px;
+  opacity: 0.9;
+  gap: 0.5rem;
+  /* margin: 0.5rem 0; */
+}
+
+.watch-video-info-dot {
+  width: 4px;
+  height: 4px;
+  background-color: var(--dark);
+  opacity: 0.7;
+  border-radius: 50%;
+}
+
+.watch-video-info-tags {
+  color: var(--blue);
+  cursor: pointer;
+}
+
+.watch-video-features {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.watch-video-like,
+.watch-video-dislike,
+.watch-video-share {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.watch-video-icon {
+  cursor: pointer;
+  font-size: 26px;
+}
+
+.video-watch-channel {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.video-watch-channel-image {
+  /* background-color: var(--blue);
+  height: 25px;
+  width: 25px;
+  border-radius: 50%; */
+  margin: 0 1rem;
+}
+
+.video-watch-channel-image img {
+  background-color: var(--blue);
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.video-watch-channel-wrapper {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.video-watch-channel-wrapper-inner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  margin: 0.2rem 0.5rem;
+}
+
+.video-watch-channel-name {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.video-watch-channel-subs {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.video-watch-channel-sub {
+  color: #f00;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.unsub-color {
+  color: var(--offwhite);
+}
+
+.watch-video-comments-count {
+  margin: 0.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.watch-video-comment-input {
+  margin-top: 0.5rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.watch-video-comment-input-wrapper {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  width: 90%;
+}
+
+.watch-video-comment-input-wrapper img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--blue);
+  margin-right: 1rem;
+}
+
+.watch-video-comment-input-wrapper input {
+  padding: 0.5rem 0.4rem;
+  background-color: var(--light);
+  border-bottom: 1px solid var(--light-primary);
+  width: 80%;
+  border-radius: 2px;
+}
+
+.watch-video-comment-input input:focus {
+  border-bottom: 1px solid var(--dark);
+}
+
+.watch-video-comment-filter {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.watch-video-comment-filter-icon {
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.watch-video-comment-filter-list-hide {
+  display: none;
+}
+
+.watch-video-comment-filter-list-show {
+  position: absolute;
+  top: 1.3rem;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: max-content;
+  border-radius: 2px;
+  box-shadow: 0 0 2px var(--rgba);
+}
+
+.watch-video-comment-filter-list-show[data-theme="dark"] {
+  background-color: var(--dark);
+  color: var(--light);
+  box-shadow: 0 0 0 1px var(--light);
+}
+
+.watch-video-comment-filter-list-show[data-theme="dark"] li {
+  background-color: var(--dark);
+  color: var(--light);
+}
+
+.watch-video-comment-filter-list-show[data-theme="dark"] li:hover {
+  background-color: var(--offwhite);
+  color: var(--dark);
+}
+
+.watch-video-comment-filter-item {
+  z-index: 99;
+  padding: 0.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  border-radius: 2px;
+}
+
+.watch-video-comment-filter-item:hover {
+  background-color: var(--light-secondary);
+  cursor: pointer;
+}
+
+.watch-video-comment-input-features-show {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.watch-video-comment-input-features-hide {
+  display: none;
+}
+
+.watch-video-comment-input-features-show button {
+  padding: 0.75rem 1rem;
+  border-radius: 2px;
+  margin: 0 1rem;
+  cursor: pointer;
+}
+
+.video-watch-comment-delete {
+  background-color: var(--light-primary);
+}
+
+.video-watch-comment-add {
+  background-color: var(--blue-secondary);
+  color: var(--light);
+}
+
+.watch-hr {
+  width: 100%;
+  height: 1px;
+  background-color: var(--light-primary);
+}
+
+.watch-video-comments-show {
+  display: flex;
+  opacity: 1;
+  transition: height 300ms ease-in-out;
+  margin: 0 5rem;
+  height: max-content;
+}
+
+.watch-video-comments-hide {
+  opacity: 0;
+  height: 0;
+}
+
+@media screen and (max-width:840px) {
+  .watch {
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+  }
+
+  .watch-video {
+    width: 85%;
+    margin-bottom: 0.5rem;
+  }
+
+  .watch-videos {
+    width: 100%;
+  }
+}

@@ -1,0 +1,54 @@
+.share-hide {
+  display: none;
+}
+
+.share-show {
+  position: absolute;
+  top: 1.5rem;
+  width: max-content;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem;
+  box-shadow: 0 0 2px var(--rgba);
+  background-color: var(--light-primary);
+}
+
+.share-link-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  width: max-content;
+  z-index: 99;
+}
+
+.share-link-list a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+
+.share-link-list-animate {
+  opacity: 0;
+  animation: linksFadeIn 200ms ease-in;
+  animation-fill-mode: forwards;
+}
+
+.share-link-list-icon {
+  font-size: 24px;
+}
+
+@keyframes linksFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
