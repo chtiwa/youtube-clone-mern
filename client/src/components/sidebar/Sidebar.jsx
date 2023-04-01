@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import './sidebar.css'
-import GoogleLogin from '../../components/googleLogin/GoogleLogin'
+import GoogleLogin from '../googleLogin/GoogleLogin'
 import { AiOutlineHome } from 'react-icons/ai'
 import { BiMovie, BiNews } from 'react-icons/bi'
 import { MdOutlineExplore, MdOutlineSubscriptions, MdVideoLibrary, MdLibraryMusic, MdSportsSoccer, MdSportsEsports, MdLiveTv, MdSettings, MdOutlineHelpOutline, MdOutlinedFlag, MdHistory, MdOutlineAccountCircle } from 'react-icons/md'

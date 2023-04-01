@@ -202,9 +202,15 @@ const Watch = () => {
         <div className="watch-video-comments-count" onClick={() => setShowComments(showComments => !showComments)}>
           Comments {!commentsLoading && comments?.length}
           {showComments ? (
-            <MdOutlineKeyboardArrowUp className="watch-video-icon" />
+            <>
+              hide comments
+              <MdOutlineKeyboardArrowUp className="watch-video-icon" />
+            </>
           ) : (
-            <MdOutlineKeyboardArrowDown className="watch-video-icon" />
+            <>
+              show comments
+              <MdOutlineKeyboardArrowDown className="watch-video-icon" />
+            </>
           )}
         </div>
         <div className="watch-video-comment-input" >

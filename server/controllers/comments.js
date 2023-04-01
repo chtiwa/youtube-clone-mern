@@ -1,18 +1,19 @@
 const Comment = require('../models/Comment')
 const Video = require('../models/Video')
 const User = require('../models/User')
-const asyncWrapper = require('../middleware/async')
+const asyncWrapper = require('../middleware/async-wrapper')
 const BaseError = require('../errors/base-error')
 
 const createComment = asyncWrapper(async (req, res) => {
   const { videoId } = req.params
+  // we are getting the user to get the userImage instead of using the jwt token
   const user = await User.findById({ _id: req.user.userId })
   if (!user) {
     throw new BaseError('Unauthorized', 401)
   }
   // const { value } = req.body
   const comment = await Comment.create({ ...req.body, userId: req.user.userId, userImage: user.imageUrl, username: user.username, videoId: videoId })
-  res.status(200).json(comment)
+  res.status(200).json({ success: true, comment: comment })
 })
 
 const createNestedComment = asyncWrapper(async (req, res) => {
@@ -29,7 +30,7 @@ const createNestedComment = asyncWrapper(async (req, res) => {
   const nestedComment = await Comment.create({ value: req.body.value, userImage: user.imageUrl, userId: req.user.userId, username: user.username, isNested: true, videoId: videoId })
   // push the nested (created) comment's _id into the parent comment
   const parentComment = await Comment.findByIdAndUpdate({ _id: parentId }, { $push: { nestedCommentsIds: nestedComment._id } }, { new: true })
-  res.status(200).json({ nestedComment: nestedComment, parentComment: parentComment })
+  res.status(200).json({ success: true, nestedComment: nestedComment, parentComment: parentComment })
 })
 
 const getComments = asyncWrapper(async (req, res) => {
@@ -41,7 +42,7 @@ const getComments = asyncWrapper(async (req, res) => {
   } else {
     comments = await Comment.find({ videoId: videoId, isNested: false }).sort({ likes: -1 })
   }
-  res.status(200).json(comments)
+  res.status(200).json({ success: true, comments: comments })
   // const commentsNumber = Number(comments.length)
   // await Video.findByIdAndUpdate({ _id: videoId }, { commentsNumber: commentsNumber }, { new: true })
 })
@@ -57,7 +58,7 @@ const getNestedComments = asyncWrapper(async (req, res) => {
     })
   )
   // console.log(nestedComments)
-  res.status(200).json({ nestedComments: nestedComments, commentId: parentId })
+  res.status(200).json({ success: true, nestedComments: nestedComments, commentId: parentId })
 })
 
 const likeComment = asyncWrapper(async (req, res) => {
@@ -66,10 +67,10 @@ const likeComment = asyncWrapper(async (req, res) => {
   const comment = await Comment.findById({ _id: commentId })
   if (comment.isNested) {
     const comment = await Comment.findByIdAndUpdate({ _id: commentId }, { $addToSet: { likes: req.user.userId } }, { new: true })
-    res.status(200).json({ nestedComment: comment, parentId: parentId, isNested: comment.isNested })
+    res.status(200).json({ success: true, nestedComment: comment, parentId: parentId, isNested: comment.isNested })
   } else {
     const comment = await Comment.findByIdAndUpdate({ _id: commentId }, { $addToSet: { likes: req.user.userId } }, { new: true })
-    res.status(200).json({ comment: comment, isNested: comment.isNested })
+    res.status(200).json({ success: true, comment: comment, isNested: comment.isNested })
   }
 })
 
@@ -79,23 +80,37 @@ const unlikeComment = asyncWrapper(async (req, res) => {
   const comment = await Comment.findById({ _id: commentId })
   if (comment.isNested) {
     const comment = await Comment.findByIdAndUpdate({ _id: commentId }, { $pull: { likes: req.user.userId } }, { new: true })
-    res.status(200).json({ nestedComment: comment, parentId: parentId, isNested: comment.isNested })
+    res.status(200).json({ success: true, nestedComment: comment, parentId: parentId, isNested: comment.isNested })
   } else {
     const comment = await Comment.findByIdAndUpdate({ _id: commentId }, { $pull: { likes: req.user.userId } }, { new: true })
-    res.status(200).json({ comment: comment, isNested: comment.isNested })
+    res.status(200).json({ success: true, comment: comment, isNested: comment.isNested })
   }
 })
 
 const dislikeComment = asyncWrapper(async (req, res) => {
   const { commentId } = req.params
-  const comment = await Comment.findByIdAndUpdate({ _id: commentId }, { $pull: { dislikes: req.user.userId } }, { new: true })
-  res.status(200).json(comment)
+  const { parentId } = req.body
+  const comment = await Comment.findById({ _id: commentId })
+  if (comment.isNested) {
+    const comment = await Comment.findByIdAndUpdate({ _id: commentId }, { $addToSet: { dislikes: req.user.userId } }, { new: true })
+    res.status(200).json({ success: true, nestedComment: comment, parentId: parentId, isNested: comment.isNested })
+  } else {
+    const comment = await Comment.findByIdAndUpdate({ _id: commentId }, { $addToSet: { dislikes: req.user.userId } }, { new: true })
+    res.status(200).json({ success: true, comment: comment, isNested: comment.isNested })
+  }
 })
 
 const undislikeComment = asyncWrapper(async (req, res) => {
   const { commentId } = req.params
-  const comment = await Comment.findByIdAndUpdate({ _id: commentId }, { $pull: { dislikes: req.user.userId } }, { new: true })
-  res.status(200).json(comment)
+  const { parentId } = req.body
+  const comment = await Comment.findById({ _id: commentId })
+  if (comment.isNested) {
+    const comment = await Comment.findByIdAndUpdate({ _id: commentId }, { $pull: { dislikes: req.user.userId } }, { new: true })
+    res.status(200).json({ success: true, nestedComment: comment, parentId: parentId, isNested: comment.isNested })
+  } else {
+    const comment = await Comment.findByIdAndUpdate({ _id: commentId }, { $pull: { dislikes: req.user.userId } }, { new: true })
+    res.status(200).json({ success: true, comment: comment, isNested: comment.isNested })
+  }
 })
 
 const deleteComment = asyncWrapper(async (req, res) => {
@@ -111,7 +126,7 @@ const deleteComment = asyncWrapper(async (req, res) => {
     const parentComment = await Comment.findByIdAndUpdate({ _id: parentId }, { $pull: { nestedCommentsIds: comment._id } }, { new: true })
     // delete the nested comment
     const deletedComment = await Comment.findByIdAndDelete({ _id: comment._id })
-    res.status(200).json({ isNested: true, nestedCommentId: deletedComment._id, parentComment: parentComment })
+    res.status(200).json({ success: true, isNested: true, nestedCommentId: deletedComment._id, parentComment: parentComment })
   } else {
     // find the parent comment and delete it  with the nested comments
     const parentComment = await Comment.findByIdAndDelete({ _id: commentId })
@@ -121,7 +136,7 @@ const deleteComment = asyncWrapper(async (req, res) => {
         return Comment.findByIdAndDelete({ _id: nestedCommentId })
       })
     )
-    res.status(200).json({ isNested: false, commentId: parentComment._id })
+    res.status(200).json({ success: true, isNested: false, commentId: parentComment._id })
   }
 })
 

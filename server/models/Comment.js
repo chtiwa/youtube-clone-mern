@@ -21,6 +21,10 @@ const CommentSchema = new mongoose.Schema({
     type: [mongoose.Schema.Types.ObjectId],
     default: []
   },
+  dislikes: {
+    type: [mongoose.Schema.Types.ObjectId],
+    default: []
+  },
   // when someone makes a comment on the parent comment
   nestedCommentsIds: {
     type: [mongoose.Schema.Types.ObjectId],

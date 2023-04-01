@@ -1,7 +1,7 @@
 const User = require('../models/User')
 const Video = require('../models/Video')
-const Comment = require('../models/Comment')
-const asyncWrapper = require('../middleware/async')
+// const Comment = require('../models/Comment')
+const asyncWrapper = require('../middleware/async-wrapper')
 const BaseError = require('../errors/base-error')
 
 const subscribe = asyncWrapper(async (req, res) => {
@@ -9,7 +9,7 @@ const subscribe = asyncWrapper(async (req, res) => {
   const user = await User.findByIdAndUpdate({ _id: req.user.userId }, { $addToSet: { subscriptions: channelId } }, { new: true })
   const channel = await User.findByIdAndUpdate({ _id: channelId }, { $addToSet: { subscribers: req.user.userId } }, { new: true })
   // update the user's subscriptions
-  res.status(200).json(channel)
+  res.status(200).json({ success: true, channel: channel })
 })
 
 const unsubscribe = asyncWrapper(async (req, res) => {
@@ -17,7 +17,7 @@ const unsubscribe = asyncWrapper(async (req, res) => {
   const user = await User.findByIdAndUpdate({ _id: req.user.userId }, { $pull: { subscriptions: channelId } }, { new: true })
   const channel = await User.findByIdAndUpdate({ _id: channelId }, { $pull: { subscribers: req.user.userId } }, { new: true })
   // send subriptions
-  res.status(200).json(channel)
+  res.status(200).json({ success: true, channel: channel })
 })
 
 const likeVideo = asyncWrapper(async (req, res) => {
@@ -30,7 +30,7 @@ const likeVideo = asyncWrapper(async (req, res) => {
     $pull: { dislikes: req.user.userId }
   }, { new: true })
   // send has liked post
-  res.status(200).json(likedVideo)
+  res.status(200).json({ success: true, likedVideo: likedVideo })
 })
 
 const unlikeVideo = asyncWrapper(async (req, res) => {
@@ -41,13 +41,12 @@ const unlikeVideo = asyncWrapper(async (req, res) => {
   const unlikedVideo = await Video.findByIdAndUpdate({ _id: videoId }, {
     $pull: { likes: req.user.userId },
   }, { new: true })
-  res.status(200).json(unlikedVideo)
+  res.status(200).json({ success: true, unlikedVideo: unlikedVideo })
 })
 
 const dislikeVideo = asyncWrapper(async (req, res) => {
   const { videoId } = req.params
   if (!req.user.userId) {
-    // return res.status(401).json({ message: `Unauthorized` })
     throw new BaseError('Unauthorized', 401)
   }
   const dislikedVideo = await Video.findByIdAndUpdate({ _id: videoId }, {
@@ -55,7 +54,7 @@ const dislikeVideo = asyncWrapper(async (req, res) => {
     $pull: { likes: req.user.userId }
   }, { new: true })
 
-  res.status(200).json(dislikedVideo)
+  res.status(200).json({ success: true, dislikedVideo: dislikedVideo })
 })
 
 const undislikeVideo = asyncWrapper(async (req, res) => {
@@ -67,7 +66,7 @@ const undislikeVideo = asyncWrapper(async (req, res) => {
     $pull: { dislikes: req.user.userId }
   }, { new: true })
 
-  res.status(200).json(undislikedVideo)
+  res.status(200).json({ success: true, undislikedVideo: undislikedVideo })
 })
 
 const getChannel = asyncWrapper(async (req, res) => {
@@ -77,7 +76,7 @@ const getChannel = asyncWrapper(async (req, res) => {
     return res.status(404).json({})
   }
   channel = await User.findById({ _id: channelId })
-  res.status(200).json(channel)
+  res.status(200).json({ success: true, channel: channel })
 })
 
 // const deleteUser = asyncWrapper(async (req, res) => {

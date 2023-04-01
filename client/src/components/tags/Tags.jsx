@@ -16,7 +16,6 @@ const Tags = () => {
   }, [dispatch])
 
   const handleTagClick = (index, tag) => {
-    // console.log(tag)
     setActiveIndex(index)
     if (tag !== "All") {
       dispatch(getVideosByTag(tag))

@@ -37,7 +37,7 @@
 
   50% {
     transform: rotate(180deg);
-    border-width: 1px;
+    border-width: 2px;
   }
 
   100% {

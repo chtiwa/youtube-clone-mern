@@ -35,10 +35,10 @@ app.use(cookieParser())
 app.use(bodyParser.json({ limit: "100mb" }))
 app.use(bodyParser.urlencoded({ limit: "100mb", extended: true }))
 
-app.use('/api/auth', authRoutes)
-app.use('/api/users', usersRoutes)
-app.use('/api/videos', videosRoutes)
-app.use('/api/comments', commentsRoutes)
+app.use('/api/v1/auth', authRoutes)
+app.use('/api/v1/users', usersRoutes)
+app.use('/api/v1/videos', videosRoutes)
+app.use('/api/v1/comments', commentsRoutes)
 
 app.use(errorHandler)
 
@@ -47,7 +47,7 @@ const port = process.env.PORT || 5000
 
 const start = async () => {
   try {
-    await connectDB(process.env.MONGO_URI_V2)
+    await connectDB(process.env.MONGO_URI)
     app.listen(port, () => console.log(`Server is listening on port : ${port}`))
   } catch (error) {
     console.log(error)

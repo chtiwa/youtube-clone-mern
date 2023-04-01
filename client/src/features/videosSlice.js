@@ -336,8 +336,8 @@ const videosSlice = createSlice({
       state.videosLoading = true
     },
     [getVideos.fulfilled]: (state, action) => {
-      state.videos = action.payload
       state.videosLoading = false
+      state.videos = action.payload.videos
     },
     [getVideos.rejected]: (state, action) => {
       state.videosLoading = false
@@ -377,7 +377,7 @@ const videosSlice = createSlice({
       state.tagsLoading = true
     },
     [getRandomTags.fulfilled]: (state, action) => {
-      state.tags = action.payload
+      state.tags = action.payload.tags
       state.tagsLoading = false
     },
     [getRandomTags.rejected]: (state, action) => {
@@ -387,7 +387,7 @@ const videosSlice = createSlice({
       state.videosLoading = true
     },
     [getVideosBySubscriptions.fulfilled]: (state, action) => {
-      state.videos = action.payload
+      state.videos = action.payload.videos
       state.videosLoading = false
     },
     [getVideosBySubscriptions.rejected]: (state, action) => {
@@ -398,7 +398,7 @@ const videosSlice = createSlice({
       state.videosLoading = true
     },
     [getVideosBySearch.fulfilled]: (state, action) => {
-      state.videos = action.payload
+      state.videos = action.payload.videos
       state.videosLoading = false
     },
     [getVideosBySearch.rejected]: (state, action) => {
@@ -409,7 +409,7 @@ const videosSlice = createSlice({
       state.searchLoading = true
     },
     [getSearchResults.fulfilled]: (state, action) => {
-      state.searchResults = action.payload
+      state.searchResults = action.payload.searchResults
       state.searchLoading = false
     },
     [getSearchResults.rejected]: (state, action) => {
@@ -420,18 +420,18 @@ const videosSlice = createSlice({
       state.videosLoading = true
     },
     [getVideosByTag.fulfilled]: (state, action) => {
-      state.videos = action.payload
+      state.videos = action.payload.videos
       state.videosLoading = false
     },
     [getVideosByTag.rejected]: (state, action) => {
       state.videosLoading = false
-      state.error = action.payload
+      state.error = action.payload.videos
     },
     [getTrendingVideos.pending]: (state) => {
       state.videosLoading = true
     },
     [getTrendingVideos.fulfilled]: (state, action) => {
-      state.videos = action.payload
+      state.videos = action.payload.videos
       state.videosLoading = false
     },
     [getTrendingVideos.rejected]: (state, action) => {
@@ -442,7 +442,7 @@ const videosSlice = createSlice({
       state.videosLoading = true
     },
     [getVideosByHistory.fulfilled]: (state, action) => {
-      state.videos = action.payload
+      state.videos = action.payload.videos
       state.videosLoading = false
     },
     [getVideosByHistory.rejected]: (state, action) => {
@@ -453,7 +453,7 @@ const videosSlice = createSlice({
       state.videosLoading = true
     },
     [getVideosByChannel.fulfilled]: (state, action) => {
-      state.videos = action.payload
+      state.videos = action.payload.videos
       state.videosLoading = false
     },
     [getVideosByChannel.rejected]: (state, action) => {
@@ -464,8 +464,8 @@ const videosSlice = createSlice({
       state.videoLoading = true
     },
     [getVideo.fulfilled]: (state, action) => {
-      state.video = action.payload
-      state.videos = state.videos.filter((video) => video._id !== action.payload._id)
+      state.video = action.payload.video
+      state.videos = state.videos.filter((video) => video._id !== action.payload.video._id)
       state.videoLoading = false
     },
     [getVideo.rejected]: (state, action) => {
@@ -477,8 +477,8 @@ const videosSlice = createSlice({
     },
     [likeVideo.fulfilled]: (state, action) => {
       state.loading = false
-      state.video.likes = action.payload.likes
-      state.video.dislikes = action.payload.dislikes
+      state.video.likes = action.payload.likedVideo.likes
+      state.video.dislikes = action.payload.likedVideo.dislikes
     },
     [likeVideo.rejected]: (state, action) => {
       state.loading = false
@@ -489,8 +489,8 @@ const videosSlice = createSlice({
     },
     [unlikeVideo.fulfilled]: (state, action) => {
       state.loading = false
-      state.video.likes = action.payload.likes
-      state.video.dislikes = action.payload.dislikes
+      state.video.likes = action.payload.unlikedVideo.likes
+      state.video.dislikes = action.payload.unlikedVideo.dislikes
     },
     [unlikeVideo.rejected]: (state, action) => {
       state.loading = false
@@ -501,8 +501,8 @@ const videosSlice = createSlice({
     },
     [dislikeVideo.fulfilled]: (state, action) => {
       state.loading = false
-      state.video.likes = action.payload.likes
-      state.video.dislikes = action.payload.dislikes
+      state.video.likes = action.payload.dislikedVideo.likes
+      state.video.dislikes = action.payload.dislikedVideo.dislikes
     },
     [dislikeVideo.rejected]: (state, action) => {
       state.loading = false
@@ -513,8 +513,8 @@ const videosSlice = createSlice({
     },
     [undislikeVideo.fulfilled]: (state, action) => {
       state.loading = false
-      state.video.likes = action.payload.likes
-      state.video.dislikes = action.payload.dislikes
+      state.video.likes = action.payload.undislikedVideo.likes
+      state.video.dislikes = action.payload.undislikedVideo.dislikes
     },
     [undislikeVideo.rejected]: (state, action) => {
       state.loading = false
@@ -524,9 +524,9 @@ const videosSlice = createSlice({
       // state.commentsLoading = true
     },
     [createComment.fulfilled]: (state, action) => {
+      // the payload has success and comment as keys
       state.commentsLoading = false
-      state.comments = [...state.comments, action.payload]
-
+      state.comments = [...state.comments, action.payload.comment]
     },
     [createComment.rejected]: (state, action) => {
       state.commentsLoading = false
@@ -537,7 +537,7 @@ const videosSlice = createSlice({
     },
     [getComments.fulfilled]: (state, action) => {
       state.commentsLoading = false
-      state.comments = action.payload
+      state.comments = action.payload.comments
     },
     [getComments.rejected]: (state, action) => {
       state.commentsLoading = false
@@ -608,8 +608,31 @@ const videosSlice = createSlice({
     },
     [dislikeComment.pending]: (state) => {
     },
+    [dislikeComment.fulfilled]: (state) => {
+      if (action.payload.isNested) {
+        // find the parent comment
+        let comment = state.comments.find((comment) => comment._id === action.payload.parentId)
+        // update the nested comment
+        comment.nestedComments = comment.nestedComments.map((nestedComment) => nestedComment._id === action.payload.nestedComment._id ? action.payload.nestedComment : nestedComment)
+      } else {
+        // update the parent comment
+        state.comments = state.comments.map((comment) => comment._id === action.payload.comment._id ? action.payload.comment : comment)
+      }
+    },
+    [dislikeComment.rejected]: (state) => {
+    },
+    [undislikeComment.fulfilled]: (state) => {
+      if (action.payload.isNested) {
+        // find the parent comment
+        let comment = state.comments.find((comment) => comment._id === action.payload.parentId)
+        // update the nested comment
+        comment.nestedComments = comment.nestedComments.map((nestedComment) => nestedComment._id === action.payload.nestedComment._id ? action.payload.nestedComment : nestedComment)
+      } else {
+        // update the parent comment
+        state.comments = state.comments.map((comment) => comment._id === action.payload.comment._id ? action.payload.comment : comment)
+      }
+    },
     [deleteComment.pending]: (state) => {
-      state.nestedCommentsLoading = false
     },
     [deleteComment.fulfilled]: (state, action) => {
       if (action.payload.isNested) {

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import './navbar.css'
 import NavbarSearch from './NavbarSearch'
 import GoogleLogin from '../googleLogin/GoogleLogin'
-import { GoogleLogout } from "react-google-login"
+// import { GoogleLogout } from "react-google-login"
+import { googleLogout } from '@react-oauth/google'
 import { AiOutlineVideoCameraAdd } from 'react-icons/ai'
 import { BsMoonStars } from 'react-icons/bs'
 import { MdOutlineAccountCircle, MdSearch, MdOutlineMoreVert, MdLogout, MdOutlineChevronRight } from 'react-icons/md'
@@ -11,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { closeSidebar, openSidebar } from '../../features/sidebarSlice'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { openMessageModal } from '../../features/messageModalSlice'
-import { setAuth, logout, getTheme, setTheme } from '../../features/usersSlice'
+import { setAuth, logout, getTheme, setTheme, checkLogin } from '../../features/usersSlice'
 
 const Navbar = () => {
   const dispatch = useDispatch()
@@ -25,6 +26,8 @@ const Navbar = () => {
 
   useEffect(() => {
     dispatch(getTheme())
+    // check if there is a cookie
+    dispatch(checkLogin())
   }, [dispatch])
 
   const handleMenu = () => {
@@ -32,12 +35,19 @@ const Navbar = () => {
     else dispatch(openSidebar())
   }
 
-  const googleLogoutSuccess = () => {
+  // const googleLogoutSuccess = () => {
+  //   setIsHorizOpen(isHorizOpen => !isHorizOpen)
+  //   dispatch(logout())
+  //   dispatch(setAuth({ name: "", imageUrl: "", tokenId: "" }))
+  //   dispatch(openMessageModal({ message: "Logout was successful", success: true }))
+  // }
+
+  const logOut = () => {
     setIsHorizOpen(isHorizOpen => !isHorizOpen)
-    dispatch(logout())
-    dispatch(setAuth({ name: "", imageUrl: "", tokenId: "" }))
+    googleLogout()
+    dispatch(setAuth({ name: "", imageUrl: "" }))
     dispatch(openMessageModal({ message: "Logout was successful", success: true }))
-  }
+  };
 
   const handleClickTheme = (theme) => {
     dispatch(setTheme(theme))
@@ -63,8 +73,13 @@ const Navbar = () => {
             <MdOutlineMoreVert className="navbar-horiz-icon" onClick={() => setIsHorizOpen(isHorizOpen => !isHorizOpen)} />
           </div>
           <ul className={`${isHorizOpen ? "navbar-more-horiz-content-show" : "navbar-more-horiz-content"}`} onMouseLeave={() => setIsHorizOpen(false)}>
-            <GoogleLogout
-              clientId="195789017703-fln5iocpgj453pd3bm7vfkrpv4n490ln.apps.googleusercontent.com"
+            <li className="navbar-more-horiz-item" onClick={logOut}  >
+              <div className="navbar-item-wrapper">
+                <MdLogout className="more-horiz-icon" />Logout
+              </div>
+            </li>
+            {/* <GoogleLogout
+              clientId={`${import.meta.env.VITE_APP_CLIENTID}`}
               render={(renderProps) => (
                 <li className="navbar-more-horiz-item" onClick={renderProps.onClick} disabled={renderProps.disabled}  >
                   <div className="navbar-item-wrapper">
@@ -73,7 +88,8 @@ const Navbar = () => {
                 </li>
               )}
               onLogoutSuccess={googleLogoutSuccess}
-            />
+            /> */}
+
             <li className="navbar-more-horiz-item" onMouseLeave={() => setIsThemeOpen(false)} data-theme={`${theme}`}>
               <div className="navbar-item-wrapper navbar-item-wrapper-relative" onClick={() => setIsThemeOpen(true)}  >
                 <BsMoonStars className="more-horiz-icon" />Theme

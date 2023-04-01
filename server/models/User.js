@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 UserSchema.methods.createJWT = function () {
-  return jwt.sign({ username: this.username, userId: this._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_LIFETIME })
+  return jwt.sign({ username: this.username, userId: this._id, imageUrl: this.imageUrl }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_LIFETIME })
 }
 
 

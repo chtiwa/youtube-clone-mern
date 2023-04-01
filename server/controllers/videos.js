@@ -2,9 +2,9 @@ require('dotenv').config()
 const Video = require('../models/Video')
 const User = require('../models/User')
 const jwt = require('jsonwebtoken')
-const Comment = require('../models/Comment')
+// const Comment = require('../models/Comment')
 const cloudinary = require('../utils/cloudinary')
-const asyncWrapper = require('../middleware/async')
+const asyncWrapper = require('../middleware/async-wrapper')
 const BaseError = require('../errors/base-error')
 
 const createVideo = asyncWrapper(async (req, res) => {
@@ -59,7 +59,7 @@ const getVideos = asyncWrapper(async (req, res) => {
   const videos = await Video.aggregate([{
     $sample: { size: 20 }
   }])
-  res.status(200).json(videos)
+  res.status(200).json({ success: true, videos: videos })
 })
 
 const getVideo = asyncWrapper(async (req, res) => {
@@ -76,7 +76,7 @@ const getVideo = asyncWrapper(async (req, res) => {
     await User.findByIdAndUpdate({ _id: payload.userId }, { $addToSet: { history: video._id } }, { new: true })
     // console.log(user.history)
   }
-  res.status(200).json(video)
+  res.status(200).json({ success: true, video: video })
 })
 
 const getVideosBySearch = asyncWrapper(async (req, res) => {
@@ -88,12 +88,12 @@ const getVideosBySearch = asyncWrapper(async (req, res) => {
       { channelName: { $regex: search, $options: "i" } }
     ]
   })
-  res.status(200).json(videos)
+  res.status(200).json({ success: true, videos: videos })
 })
 
 const getTrendingVideos = asyncWrapper(async (req, res) => {
   const videos = await Video.find({}).limit(30).sort({ views: -1 })
-  res.status(200).json(videos)
+  res.status(200).json({ success: true, videos: videos })
 })
 
 const getSearchResults = asyncWrapper(async (req, res) => {
@@ -104,13 +104,13 @@ const getSearchResults = asyncWrapper(async (req, res) => {
       { channelName: { $regex: search, $options: "i" } }
     ]
   }, { _id: 0, title: 1 })
-  res.status(200).json(results)
+  res.status(200).json({ success: true, searchResults: results })
 })
 
 const getVideosByTag = asyncWrapper(async (req, res) => {
   const { tag } = req.query
   const videos = await Video.find({ tags: { $in: [tag] } })
-  res.status(200).json(videos)
+  res.status(200).json({ success: true, videos: videos })
 })
 
 const getVideosBySubscriptions = asyncWrapper(async (req, res) => {
@@ -121,21 +121,25 @@ const getVideosBySubscriptions = asyncWrapper(async (req, res) => {
     })
   )
   // Promise.all returns an array
-  res.status(200).json(videos[0])
+  res.status(200).json({ success: true, videos: videos[0] })
 })
 
 const getVideosByChannel = asyncWrapper(async (req, res) => {
   const { channelId } = req.params
   const videos = await Video.find({ userId: channelId })
-  res.status(200).json(videos)
+  res.status(200).json({ success: true, videos: videos })
 })
 
 const getRandomTags = asyncWrapper(async (req, res) => {
   const videos = await Video.aggregate([{ $sample: { size: 20 } }])
   const tags = videos.map((video) => {
-    return video.tags
+    if (video.tags.length > 1) {
+      return video.tags[0]
+    } else {
+      return video.tags
+    }
   })
-  res.status(200).json(tags)
+  res.status(200).json({ success: true, tags: tags })
 })
 
 const getVideosByHistory = asyncWrapper(async (req, res) => {
@@ -146,7 +150,7 @@ const getVideosByHistory = asyncWrapper(async (req, res) => {
       return Video.findById({ _id: videoId })
     })
   )
-  res.status(200).json(videos)
+  res.status(200).json({ success: true, videos, videos })
 })
 
 // const deleteVideo = asyncWrapper(async (req, res) => {

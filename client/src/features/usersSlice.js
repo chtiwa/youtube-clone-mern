@@ -2,10 +2,21 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../axios'
 import { openMessageModal } from './messageModalSlice'
 
+// when there is no cookie
 export const authenticate = createAsyncThunk('users/authenticate', async (form, { dispatch, rejectWithValue }) => {
   try {
     console.log(form)
     const { data } = await axiosInstance.post('/auth', form)
+    return data
+  } catch (error) {
+    dispatch(openMessageModal({ message: error?.response?.data?.message || "There was an error", success: false }))
+    return rejectWithValue({ message: error?.response?.data?.message || "There was an error" })
+  }
+})
+
+export const checkLogin = createAsyncThunk('users/checkLogin', async (_, { dispatch, rejectWithValue }) => {
+  try {
+    const { data } = await axiosInstance.get('/auth/check-login')
     return data
   } catch (error) {
     dispatch(openMessageModal({ message: error?.response?.data?.message || "There was an error", success: false }))
@@ -61,9 +72,10 @@ const initialState = {
   userId: "",
   email: "",
   imageUrl: "",
-  tokenId: "",
+  // tokenId: "",
   theme: "light",
   isLoggedIn: false,
+  checkLoginLoading: true,
   loading: false,
   error: false,
   channel: {},
@@ -77,7 +89,7 @@ const usersSlice = createSlice({
     setAuth: (state, action) => {
       state.username = action.payload.username
       state.email = action.payload.email
-      state.tokenId = action.payload.tokenId
+      // state.tokenId = action.payload.tokenId
     },
     getTheme: (state) => {
       const theme = `${window?.localStorage?.getItem("theme")}`
@@ -98,15 +110,28 @@ const usersSlice = createSlice({
       state.imageUrl = action.payload.user.imageUrl
       state.isLoggedIn = action.payload.isLoggedIn
     },
+    [logout.pending]: (state, action) => {
+      state.checkLoginLoading = true
+    },
     [logout.fulfilled]: (state, action) => {
       state.isLoggedIn = action.payload.isLoggedIn
+      state.checkLoginLoading = false
+    },
+    [logout.fulfilled]: (state, action) => {
+      state.checkLoginLoading = false
+    },
+    [checkLogin.fulfilled]: (state, action) => {
+      state.isLoggedIn = action.payload.isLoggedIn
+      state.username = action.payload.username
+      state.userId = action.payload.userId
+      state.imageUrl = action.payload.imageUrl
     },
     [subscribe.pending]: (state) => {
       state.loading = false
     },
     [subscribe.fulfilled]: (state, action) => {
       state.loading = false
-      state.channel.subscribers = action.payload.subscribers
+      state.channel.subscribers = action.payload.channel.subscribers
     },
     [subscribe.rejected]: (state, action) => {
       state.loading = false
@@ -117,7 +142,7 @@ const usersSlice = createSlice({
     },
     [unsubscribe.fulfilled]: (state, action) => {
       state.loading = false
-      state.channel.subscribers = action.payload.subscribers
+      state.channel.subscribers = action.payload.channel.subscribers
     },
     [unsubscribe.rejected]: (state, action) => {
       state.loading = false
@@ -128,7 +153,7 @@ const usersSlice = createSlice({
     },
     [getChannel.fulfilled]: (state, action) => {
       state.channelLoading = false
-      state.channel = action.payload
+      state.channel = action.payload.channel
     },
     [getChannel.rejected]: (state, action) => {
       state.channelLoading = false

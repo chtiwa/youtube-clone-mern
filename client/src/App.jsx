@@ -19,12 +19,20 @@ const App = () => {
       <Navbar />
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route path="" element={<Home />} />
+          <Route index element={<Home />} />
           <Route path="results" element={<Results />} />
           <Route path="explore" element={<Explore />} />
           <Route path="/channel/:name" element={<Channel />} />
-          <Route path="/history" element={<History />} />
-          <Route path="/subscriptions" element={<Subscriptions />} />
+          <Route path="/history" element={
+            <PrivateRoute>
+              <History />
+            </PrivateRoute>
+          } />
+          <Route path="/subscriptions" element={
+            <PrivateRoute>
+              <Subscriptions />
+            </PrivateRoute>
+          } />
           <Route path="/watch/:id" element={<Watch />} />
           <Route path="/create" element={
             <PrivateRoute>
