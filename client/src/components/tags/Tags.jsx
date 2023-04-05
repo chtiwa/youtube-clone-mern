@@ -26,16 +26,16 @@ const Tags = () => {
 
   return (
     <div className="tags" data-theme={`${theme}`}>
-      {currentIndex <= tags.length - 13 && (
+      {currentIndex <= tags.length - 18 && (
         <button className="next-btn" onClick={() => setCurrentIndex(currentIndex => currentIndex + 1)} ><MdOutlineArrowForwardIos className="tags-icon" /></button>
       )}
       {currentIndex !== 0 && (
         <button className="prev-btn" onClick={() => setCurrentIndex(currentIndex => currentIndex - 1)} ><MdOutlineArrowBackIosNew className="tags-icon" /></button>
       )}
       <ul className="tags-list" style={{ transform: `translateX(-${currentIndex * 150}px)` }} >
-        {!tagsLoading && tagsList?.map((tag, index) => {
+        {!tagsLoading && tagsList?.length > 0 && tagsList?.map((tag, index) => {
           return (
-            <li className={`${activeIndex === index ? "tags-item tags-item-active" : "tags-item"}`} onClick={() => handleTagClick(index, tag)} key={index} > {tag} </li>
+            <li className={`${activeIndex === index ? "tags-item-active" : ""} tags-item`} onClick={() => handleTagClick(index, tag)} key={index} > {tag} </li>
           )
         })}
       </ul>

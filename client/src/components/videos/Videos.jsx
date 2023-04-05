@@ -54,14 +54,13 @@ const Videos = ({ currentVideoId }) => {
     )
   }
 
-  if ((!videosLoading && videos.length === 0) || (!videosLoading && videos.length === "")) {
-    // console.log(videos.length)
+  if ((!videosLoading && videos?.length === 0) || (!videosLoading && videos?.length === "")) {
     return <h2 style={{ margin: "3rem auto", width: "100%", textAlign: "center" }} >No videos to be displayed</h2>
   }
 
   return (
     <div className={`${isWatch ? "videos-watch" : "videos"} ${isResults && "videos-results"}`}>
-      {!videosLoading && videos.length > 0 && videos?.map((video, index) => {
+      {!videosLoading && videos?.length > 0 && videos?.map((video, index) => {
         return video?.videoUrl?.length > 0 && (
           <Video isWatch={isWatch} isResults={isResults} key={index} {...video} />
         )

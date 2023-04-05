@@ -41,7 +41,7 @@ const Comment = ({ comment }) => {
   }
 
   const handleCommentReply = () => {
-    if (reply.length >= 2) {
+    if (reply.trim().length >= 2) {
       const form = { value: reply }
       dispatch(createNestedComment({ videoId: comment.videoId, parentId: comment._id, form: form }))
       setShowReplyInput(false)

@@ -4,17 +4,21 @@ import GoogleLogin from '../googleLogin/GoogleLogin'
 import { AiOutlineHome } from 'react-icons/ai'
 import { BiMovie, BiNews } from 'react-icons/bi'
 import { MdOutlineExplore, MdOutlineSubscriptions, MdVideoLibrary, MdLibraryMusic, MdSportsSoccer, MdSportsEsports, MdLiveTv, MdSettings, MdOutlineHelpOutline, MdOutlinedFlag, MdHistory, MdOutlineAccountCircle } from 'react-icons/md'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { closeSidebar } from '../../features/sidebarSlice'
 
 
 const Menu = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
   const { isSidebarOpen } = useSelector(state => state.sidebar)
   const { isLoggedIn, theme } = useSelector(state => state.users)
   const [isWatch, setIsWatch] = useState(false)
+  // if the sidebar is open
   const [openCurrentIndex, setOpenCurrentIndex] = useState(0)
+  // if the sidebar is closed
   const [closedCurrentIndex, setClosedCurrentIndex] = useState(0)
 
   useEffect(() => {
@@ -47,9 +51,17 @@ const Menu = () => {
   ]
 
   const handleOpenClick = (index, text) => {
+    console.log(index)
     if (index >= 4) return
-    setOpenCurrentIndex(index)
-    setClosedCurrentIndex(index)
+    if (index >= 2 && isLoggedIn) {
+      setOpenCurrentIndex(index)
+      setClosedCurrentIndex(index)
+    } else if (index < 2) {
+      setClosedCurrentIndex(index)
+      setOpenCurrentIndex(index)
+    } else {
+      return
+    }
     if (text === "Home" || text === "Explore") {
       navigate('/')
     } else if (text === "History") {
@@ -60,19 +72,41 @@ const Menu = () => {
   }
 
   const handleClosedClick = (index, text) => {
+    // the icons where their index is bigger than 4 are obselete
     if (index >= 4) return
-    setOpenCurrentIndex(index)
-    setClosedCurrentIndex(index)
+    // if the user is not logged in don't go to history or subscribtions
+    if (index >= 2 && isLoggedIn) {
+      setOpenCurrentIndex(index)
+      setClosedCurrentIndex(index)
+    } else if (index < 2) {
+      setClosedCurrentIndex(index)
+      setOpenCurrentIndex(index)
+    } else {
+      return
+    }
     if (text === "Home") {
       navigate('/')
+    } else if (text === "Explore") {
+      navigate('/explore')
     } else if (text === "History") {
       navigate('/history')
     } else if (text === "Subscriptions") {
       navigate('/subscriptions')
-    } else if (text === "Explore") {
-      navigate('/explore')
     }
   }
+
+
+
+  useEffect(() => {
+    const closeMenu = () => {
+      if (window.innerWidth < 1050) {
+        dispatch(closeSidebar())
+      }
+    }
+    window.addEventListener("resize", closeMenu)
+    // Cleanup function to remove the event listener
+    return () => window.removeEventListener("resize", closeMenu)
+  }, [])
 
   return (
     <div className={`${isSidebarOpen ? "menu" : "hide-menu"}`} data-theme={`${theme}`} style={{ display: `${isWatch ? "none" : "block"}` }} >
@@ -81,7 +115,7 @@ const Menu = () => {
           const { Icon, text } = item
           return (
             <>
-              <li className={`${openCurrentIndex === index ? "menu-list-item menu-list-item-active" : "menu-list-item"}`} onClick={() => handleOpenClick(index, text)} key={index}>
+              <li className={`${openCurrentIndex === index ? " menu-list-item-active" : ""} menu-list-item`} onClick={() => handleOpenClick(index, text)} key={index}>
                 <Icon className="menu-list-item-icon" />
                 {text}
               </li>
@@ -91,7 +125,7 @@ const Menu = () => {
         }) : sidebarClosedList.map((item, index) => {
           const { Icon, text } = item
           return (
-            <li className={`${closedCurrentIndex === index ? "menu-list-item-active menu-list-item-hidden" : "menu-list-item-hidden"}`} onClick={() => handleClosedClick(index, text)} key={index} >
+            <li className={`${closedCurrentIndex === index ? "menu-list-item-active " : ""} menu-list-item-hidden`} onClick={() => handleClosedClick(index, text)} key={index} >
               <Icon className="menu-list-item-icon" />
               {text}
             </li>

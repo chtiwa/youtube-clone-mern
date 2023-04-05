@@ -32,18 +32,13 @@
   grid-template-columns: 1fr;
   gap: 0.3rem;
   width: 90%;
-  /* max-width: 200px; */
 }
 
 .videos-results {
   margin: 0.5rem auto;
-  /* display: grid;
-  place-items: center;
-  grid-template-columns: 1fr; */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 0.3rem;
   width: 100%;
-  /* max-width: 400px; */
 }

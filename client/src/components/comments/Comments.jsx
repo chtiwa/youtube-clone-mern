@@ -11,7 +11,6 @@ const Comments = ({ videoId, filter }) => {
     dispatch(getComments({ videoId: videoId, filter: filter }))
   }, [dispatch, videoId, filter])
 
-  // make a seperate state for nested comments
   return (
     <div className='comments'>
       {!commentsLoading && comments.length > 0 && comments.map((comment, index) => {

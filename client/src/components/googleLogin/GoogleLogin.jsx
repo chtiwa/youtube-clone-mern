@@ -41,7 +41,7 @@ const GoogleLoginComponent = () => {
         })
         console.log(data)
         dispatch(authenticate({ username: data.name, email: data.email, imageUrl: data.picture }))
-        dispatch(setAuth({ username: data.name, imageUrl: data.picture }))
+        // dispatch(setAuth({ username: data.name, imageUrl: data.picture }))
         dispatch(openMessageModal({ message: 'Google Sign In was successful!', success: true }))
       } catch (error) {
         console.log(error)
@@ -49,7 +49,8 @@ const GoogleLoginComponent = () => {
     }
 
     // after we check the login of the user see if this function fires or not  
-    if (user && checkLoginLoading && !isLoggedIn) {
+    console.log(user, checkLoginLoading, isLoggedIn)
+    if (user && !checkLoginLoading && !isLoggedIn) {
       getUserCredentials()
     }
   }, [user])

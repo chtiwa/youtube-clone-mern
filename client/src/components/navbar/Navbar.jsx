@@ -25,6 +25,10 @@ const Navbar = () => {
   const [isThemeOpen, setIsThemeOpen] = useState(false)
 
   useEffect(() => {
+    console.log(isLoggedIn)
+  }, [isLoggedIn])
+
+  useEffect(() => {
     dispatch(getTheme())
     // check if there is a cookie
     dispatch(checkLogin())
@@ -35,17 +39,12 @@ const Navbar = () => {
     else dispatch(openSidebar())
   }
 
-  // const googleLogoutSuccess = () => {
-  //   setIsHorizOpen(isHorizOpen => !isHorizOpen)
-  //   dispatch(logout())
-  //   dispatch(setAuth({ name: "", imageUrl: "", tokenId: "" }))
-  //   dispatch(openMessageModal({ message: "Logout was successful", success: true }))
-  // }
-
   const logOut = () => {
     setIsHorizOpen(isHorizOpen => !isHorizOpen)
     googleLogout()
-    dispatch(setAuth({ name: "", imageUrl: "" }))
+    // remove the cookie
+    dispatch(logout())
+    // dispatch(setAuth({ name: "", imageUrl: "" }))
     dispatch(openMessageModal({ message: "Logout was successful", success: true }))
   };
 
@@ -78,18 +77,6 @@ const Navbar = () => {
                 <MdLogout className="more-horiz-icon" />Logout
               </div>
             </li>
-            {/* <GoogleLogout
-              clientId={`${import.meta.env.VITE_APP_CLIENTID}`}
-              render={(renderProps) => (
-                <li className="navbar-more-horiz-item" onClick={renderProps.onClick} disabled={renderProps.disabled}  >
-                  <div className="navbar-item-wrapper">
-                    <MdLogout className="more-horiz-icon" />Logout
-                  </div>
-                </li>
-              )}
-              onLogoutSuccess={googleLogoutSuccess}
-            /> */}
-
             <li className="navbar-more-horiz-item" onMouseLeave={() => setIsThemeOpen(false)} data-theme={`${theme}`}>
               <div className="navbar-item-wrapper navbar-item-wrapper-relative" onClick={() => setIsThemeOpen(true)}  >
                 <BsMoonStars className="more-horiz-icon" />Theme

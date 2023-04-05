@@ -10,6 +10,7 @@ const MessageModal = () => {
 	useEffect(() => {
 		const timer = setTimeout(() => {
 			dispatch(closeMessageModal())
+			// 3100 ms to let the animation play
 		}, [3100])
 		return () => clearTimeout(timer)
 	}, [dispatch, isMessageModalOpen])

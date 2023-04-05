@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './components/navbar/Navbar'
 import Layout from './Layout'
@@ -12,8 +12,23 @@ import Create from './pages/create/Create'
 import PrivateRoute from './PrivateRoute'
 import Redirect from './Redirect'
 import Explore from './pages/explore/Explore'
+import { useSelector } from 'react-redux'
 
 const App = () => {
+  const { theme } = useSelector(state => state.users)
+
+  useEffect(() => {
+    const root = document.getElementById('root')
+    if (theme === "dark") {
+      root.style.backgroundColor = "var(--dark)"
+      root.style.color = "var(--light)"
+    } else {
+      root.style.backgroundColor = "var(--light)"
+      root.style.color = "var(--dark)"
+    }
+
+  }, [theme])
+
   return (
     <BrowserRouter>
       <Navbar />

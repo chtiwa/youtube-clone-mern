@@ -114,17 +114,27 @@ const usersSlice = createSlice({
       state.checkLoginLoading = true
     },
     [logout.fulfilled]: (state, action) => {
-      state.isLoggedIn = action.payload.isLoggedIn
+      state.isLoggedIn = false
+      state.username = ""
+      state.userId = ""
+      state.imageUrl = ""
       state.checkLoginLoading = false
     },
-    [logout.fulfilled]: (state, action) => {
+    [logout.rejected]: (state, action) => {
       state.checkLoginLoading = false
+    },
+    [checkLogin.pending]: (state, action) => {
+      state.checkLoginLoading = true
     },
     [checkLogin.fulfilled]: (state, action) => {
       state.isLoggedIn = action.payload.isLoggedIn
       state.username = action.payload.username
       state.userId = action.payload.userId
       state.imageUrl = action.payload.imageUrl
+      state.checkLoginLoading = false
+    },
+    [checkLogin.rejected]: (state, action) => {
+      state.checkLoginLoading = false
     },
     [subscribe.pending]: (state) => {
       state.loading = false

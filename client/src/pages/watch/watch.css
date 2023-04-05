@@ -194,6 +194,12 @@
   cursor: pointer;
 }
 
+.watch-video-comments-count-toggle {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .watch-video-comment-input {
   margin-top: 0.5rem;
   width: 100%;

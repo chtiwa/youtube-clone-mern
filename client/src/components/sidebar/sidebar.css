@@ -28,12 +28,12 @@
 
 @media screen and (max-width:1035px) {
   .menu {
-    position: absolute;
+    display: none;
     z-index: 3;
   }
 
   .hide-menu {
-    transition: none;
+    width: 80px;
   }
 }
 

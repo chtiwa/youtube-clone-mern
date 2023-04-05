@@ -15,6 +15,7 @@ const Channel = () => {
   const [hasSubscribed, setHasSubscribed] = useState(false)
 
   useEffect(() => {
+    if (location?.state?.channelId === undefined || location?.state?.channelId?.length === 0) return
     dispatch(getChannel(location?.state?.channelId))
     dispatch(getVideosByChannel(location?.state?.channelId))
   }, [dispatch, location.state])
@@ -58,7 +59,7 @@ const Channel = () => {
             )}
             <div className="channel-info-extra-inner">
               <div className="channel-info-extra-inner-name">{channel?.username}</div>
-              <div className="channel-info-extra-inner-subs">{channel?.subscribers?.length} subsribers</div>
+              <div className="channel-info-extra-inner-subs">{channel?.subscribers?.length} subscribers</div>
             </div>
           </div>
           <div className="channel-info-extra-wrapper">

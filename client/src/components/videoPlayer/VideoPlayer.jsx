@@ -42,6 +42,7 @@ const VideoPlayer = ({ isFullScreen, setIsFullScreen, isKeyControlActive, setIsK
   const handleFullScreen = useCallback(() => {
     setIsFullScreen(true)
   }, [setIsFullScreen])
+
   const handleFullScreenExit = useCallback(() => {
     setIsFullScreen(false)
   }, [setIsFullScreen])
@@ -112,9 +113,6 @@ const VideoPlayer = ({ isFullScreen, setIsFullScreen, isKeyControlActive, setIsK
     seconds = seconds < 10 ? `0${seconds}` : seconds
     minutes = minutes < 10 ? `0${minutes}` : minutes
     hours = hours < 10 ? `0${hours}` : hours
-    // console.log(seconds)
-    // console.log(minutes)
-    // console.log(hours)
 
     if (hours.toString() === "00") {
       return `${minutes}:${seconds}`
@@ -141,9 +139,7 @@ const VideoPlayer = ({ isFullScreen, setIsFullScreen, isKeyControlActive, setIsK
     const rect = timelineContainerRef.current.getBoundingClientRect()
     const percent = Math.min(Math.max(0, e.pageX - rect.x), rect.width) / rect.width
     // binary version of wich buttons are being pressed
-    // console.log(e.buttons)
     if ((e.buttons && 1) === 1) {
-      // console.log(true)
       setIsScrubbing(true)
     } else {
       setIsScrubbing(false)
@@ -163,7 +159,6 @@ const VideoPlayer = ({ isFullScreen, setIsFullScreen, isKeyControlActive, setIsK
 
   const handleStopScrubbing = () => {
     setIsScrubbing(false)
-    // console.log(isScrubbing)
   }
 
   const handleTimeUpdate = () => {
@@ -236,9 +231,9 @@ const VideoPlayer = ({ isFullScreen, setIsFullScreen, isKeyControlActive, setIsK
                   return (
                     <div key={index}>
                       {speed !== "1" ? (
-                        <li className={`${isPlayBackRate.toString() === speed ? "playbackrate-list-item-active playbackrate-list-item" : "playbackrate-list-item"}`} onClick={() => handleRateChange(speed)} key={index} >{speed}</li>
+                        <li className={`${isPlayBackRate.toString() === speed ? "playbackrate-list-item-active" : ""} playbackrate-list-item`} onClick={() => handleRateChange(speed)} key={index} >{speed}</li>
                       ) : (
-                        <li className={`${isPlayBackRate.toString() === speed ? "playbackrate-list-item-active playbackrate-list-item" : "playbackrate-list-item"}`} onClick={() => handleRateChange(speed)} key={index} >Normal</li>
+                        <li className={`${isPlayBackRate.toString() === speed ? "playbackrate-list-item-active " : ""} playbackrate-list-item`} onClick={() => handleRateChange(speed)} key={index} >Normal</li>
                       )}
                     </div>
                   )

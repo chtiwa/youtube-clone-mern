@@ -17,7 +17,7 @@ import moment from 'moment'
 
 const Watch = () => {
   const { id } = useParams()
-  const url = `http://localhost:3000/watch/${id}`
+  // const url = `http://localhost:3000/watch/${id}`
   const dispatch = useDispatch()
   const { video, videoLoading, comments, commentsLoading, secondStepCompleted } = useSelector(state => state.videos)
   const { channel, userId, imageUrl, isLoggedIn, theme } = useSelector(state => state.users)
@@ -34,11 +34,11 @@ const Watch = () => {
   const [showCommentSettings, setShowCommentSettings] = useState(false)
   const [showShare, setShowShare] = useState(false)
 
-  useEffect(() => {
-    if (secondStepCompleted) {
-      dispatch(setSecondStep())
-    }
-  }, [dispatch, secondStepCompleted])
+  // useEffect(() => {
+  //   if (secondStepCompleted) {
+  //     dispatch(setSecondStep())
+  //   }
+  // }, [dispatch, secondStepCompleted])
 
   useEffect(() => {
     dispatch(getVideo(id))
@@ -50,10 +50,12 @@ const Watch = () => {
 
   useEffect(() => {
     // to check the subs
+    if (video?.userId === undefined || video?.userId?.length === 0) return
     dispatch(getChannel(video?.userId))
   }, [dispatch, video.userId])
 
   useEffect(() => {
+    if (!userId) return
     setHaslikedVideo(video?.likes?.includes(userId))
     // video.userId is the channel Id
     if (!hasLikedVideo) {
@@ -62,6 +64,7 @@ const Watch = () => {
   }, [video.likes, userId, video.dislikes, hasLikedVideo])
 
   useEffect(() => {
+    if (!userId) return
     setHasSubscribed(channel?.subscribers?.includes(userId))
   }, [channel.subscribers, userId])
 
@@ -75,7 +78,7 @@ const Watch = () => {
   }
 
   const handleAddComment = () => {
-    if (comment.length > 2) {
+    if (comment.trim().length > 2) {
       const form = { value: comment }
       dispatch(createComment({ videoId: id, form: form }))
       setComment("")
@@ -162,7 +165,7 @@ const Watch = () => {
             <div className="watch-video-share" onClick={() => setShowShare(true)} onMouseLeave={() => setShowShare(false)} >
               <AiOutlineShareAlt className="watch-video-icon" />
               Share
-              <Share showShare={showShare} setShowShare={setShowShare} url={url} />
+              <Share showShare={showShare} setShowShare={setShowShare} url={`${import.meta.env.VITE_APP_CLIENT_URL}/watch/${id}`} />
             </div>
           </div>
         </div>
@@ -180,7 +183,7 @@ const Watch = () => {
               <div className="video-watch-channel-name">{video?.channelName}</div>
               <div className="video-watch-channel-subs">{channel?.subscribers?.length} subscribers</div>
             </div>
-            {((channel?._id !== userId) || (userId.length === 0)) && (
+            {((channel?._id !== userId) || (userId?.length === 0)) && (
               <div className="video-watch-channel-wrapper-inner">
                 {hasSubscribed ? (
                   <p className="video-watch-channel-sub unsub-color" onClick={handleSubscribe} >UNSUBSCRIBE</p>
@@ -202,15 +205,15 @@ const Watch = () => {
         <div className="watch-video-comments-count" onClick={() => setShowComments(showComments => !showComments)}>
           Comments {!commentsLoading && comments?.length}
           {showComments ? (
-            <>
+            <div className="watch-video-comments-count-toggle">
               hide comments
               <MdOutlineKeyboardArrowUp className="watch-video-icon" />
-            </>
+            </div>
           ) : (
-            <>
+            <div className="watch-video-comments-count-toggle">
               show comments
               <MdOutlineKeyboardArrowDown className="watch-video-icon" />
-            </>
+            </div>
           )}
         </div>
         <div className="watch-video-comment-input" >
